@@ -17,8 +17,7 @@ This is a containerized Streamlit application for performing A/B testing. It all
 
 1. **Clone the Repository**:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/ben-bowman/public.git
    ```
 
    **Alternatively**, download the repository directly from the GitHub UI:
@@ -38,9 +37,49 @@ This is a containerized Streamlit application for performing A/B testing. It all
    ```
 
 3. **Build the Docker Image**:
-   ```bash
-   docker build -t ab-testing-tool .
-   ```
+
+   ### For Windows Users:
+   - Open **PowerShell** or **Command Prompt**.
+   - Navigate to the directory containing the `Dockerfile` and other project files using:
+     ```bash
+     cd /path/to/project-directory
+     ```
+   - To confirm you're in the correct directory, use:
+     - In **Command Prompt**: 
+       ```bash
+       dir
+       ```
+     - In **PowerShell**: 
+       ```bash
+       Get-ChildItem
+       ```
+   - Build the Docker image using:
+     ```bash
+     docker build -t ab-testing-tool .
+     ```
+   - If you encounter an error like "`docker buildx build` requires exactly 1 argument," use the following command instead:
+     ```bash
+     docker buildx build --tag ab-testing-tool .
+     ```
+
+   ### For Mac/Linux Users:
+   - Open a terminal.
+   - Navigate to the directory containing the `Dockerfile` and other project files using:
+     ```bash
+     cd /path/to/project-directory
+     ```
+   - To confirm you're in the correct directory, use:
+     ```bash
+     ls
+     ```
+   - Build the Docker image:
+     ```bash
+     docker build -t ab-testing-tool .
+     ```
+   - If you're not in the same directory, provide the full path to the project directory:
+     ```bash
+     docker build -t ab-testing-tool /full/path/to/project-directory
+     ```
 
 4. **Run the Docker Container**:
    ```bash
@@ -56,7 +95,7 @@ This is a containerized Streamlit application for performing A/B testing. It all
   - Select the appropriate columns for control and treatment groups.
   - View the statistical analysis results and data visualizations.
 
-- **Sample Data**: You can use the provided sample data for testing purposes. [Download sample_data.csv](./sample_data.csv)
+- **Sample Data**: You can use the provided sample data for testing purposes.
 
 ## Requirements
 This application uses the following Python libraries:
