@@ -1,0 +1,100 @@
+version: 2
+
+sources:
+  - name: northwind
+    schema: main
+    tables:
+      - name: customers
+        description: "Contains customer details."
+        columns:
+          - name: customerid
+            description: "Unique identifier for each customer."
+            tests:
+              - not_null
+              - unique
+      - name: orders        
+        description: "Contains basic info about each order."
+        columns:
+          - name: orderid
+            description: "Unique identifier for each order."
+            tests:
+              - not_null
+              - unique
+      - name: "order_details" #alias for cleaner references within dbt
+        description: "Contains details about what products are in each order."
+        identifier: "Order Details" # Actual table name in the database
+        tests:
+          - dbt_utils.unique_combination_of_columns:
+              combination_of_columns:
+                - orderid
+                - productid
+      - name: products
+        description: "Contains info on each product offered."
+        columns:
+          - name: productid
+            description: "Unique identifier for each product."
+            tests:
+              - not_null
+              - unique
+      - name: employees
+        description: "Contains info on each employee."
+        columns:
+          - name: employeeid
+            description: "Unique identifier for each employee."
+            tests:
+              - not_null
+              - unique
+
+models:
+  - name: employee_sales_performance
+    description: "Analyzes employee sales performance by year, including total sales and rankings."
+    tests:
+       - dbt_utils.unique_combination_of_columns:
+           combination_of_columns:
+             - employeeid
+             - sales_year
+    columns:
+      - name: employeeid
+        description: "Unique identifier for each employee."
+      - name: sales_year
+        description: "The year of the sales data."
+      - name: total_sales
+        description: "The total sales value for the employee in the given year."
+      - name: yearly_rank
+        description: "The rank of the employee based on total sales for the given year."
+
+  - name: inventory_restocking
+    description: "Generates a restocking report based on inventory levels and average daily sales."
+    columns:
+      - name: productid
+        description: "Unique identifier for the product."
+        tests:
+          - not_null
+      - name: unitsinstock
+        description: "The current number of units available in stock."
+      - name: reorder_quantity
+        description: "The quantity to reorder if stock falls below the reorder level."
+
+  - name: order_fulfillment_times
+    description: "Analyzes the time taken to fulfill orders and flags outliers."
+    columns:
+      - name: orderid
+        description: "Unique identifier for the order."
+        tests:
+          - not_null
+      - name: fulfillment_days
+        description: "The number of days it took to fulfill the order."
+      - name: fulfillment_flag
+        description: "Indicates whether the order is an outlier based on fulfillment time."
+
+  - name: sales_analysis_by_customer
+    description: "Summarizes total sales and order behavior by customer."
+    columns:
+      - name: customerid
+        description: "Unique identifier for each customer."
+        tests:
+          - not_null
+      - name: total_sales
+        description: "The total sales value for the customer."
+      - name: avg_order_value
+        description: "The average value of the customer's orders."

@@ -1,0 +1,31 @@
+# Logs folder
+logs/
+
+# dbt-specific directories
+target/
+dbt_modules/
+
+# Environment files
+.env
+*.env
+
+# Python-related files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# SQLite database files
+*.db
+*.sqlite
+
+# macOS-specific files
+.DS_Store
+
+# Windows-specific files
+Thumbs.db
+
+# IDE-specific files
+.idea/
+.vscode/
+*.swp
