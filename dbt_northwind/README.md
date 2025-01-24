@@ -1,6 +1,6 @@
 # dbt_northwind
 
-This is a dbt project using the Northwind database. The project demonstrates dbt functionality with a SQLite backend. It includes the data and profiles needed. There are some prerequisites if you wish to run the dbt model. However, if you only want to view it, feel free to explore the repo.
+This is a dbt project using the Northwind database. The project demonstrates dbt functionality with a SQLite backend. It includes the data and profiles needed. There are some prerequisites if you wish to run the dbt models. However, if you only want to view it, feel free to explore the repo.
 
 ## Project Setup
 
@@ -46,6 +46,12 @@ Follow these instructions to set up and run the dbt_northwind project.
      dbt deps
      ```
 
+3. **Initialize the dbt project:**
+   - Run the following command to ensure dbt recognizes the project and everything is set up correctly:
+     ```bash
+     dbt debug
+     ```
+
 ### Reviewing the SQL
 
 1. **Compile the models:**
@@ -59,19 +65,13 @@ Follow these instructions to set up and run the dbt_northwind project.
 
 ### Running the Project
 
-1. **Initialize the dbt project:**
-   - Run the following command to ensure dbt recognizes the project:
-     ```bash
-     dbt debug
-     ```
-
-2. **Run dbt models:**
+1. **Run dbt models:**
    - To execute the dbt models and generate results:
      ```bash
      dbt run
      ```
 
-3. **Run dbt tests:**
+2. **Run dbt tests:**
    - To validate the models and ensure data integrity, run the tests included in the project:
      ```bash
      dbt test
