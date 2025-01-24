@@ -15,10 +15,6 @@ __pycache__/
 *.pyo
 *.pyd
 
-# SQLite database files
-*.db
-*.sqlite
-
 # macOS-specific files
 .DS_Store
 
