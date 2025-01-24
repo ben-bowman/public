@@ -1,0 +1,78 @@
+# dbt_northwind
+
+This is a dbt project using the Northwind database. The project demonstrates dbt functionality with a SQLite backend. It includes the data and profiles needed. There are some prerequisites if you wish to run the dbt model. However, if you only want to view it, feel free to explore the repo.
+
+## Project Setup
+
+Follow these instructions to set up and run the dbt_northwind project.
+
+### Prerequisites
+
+1. **Install Python:**
+   - Ensure you have Python 3.7 or higher installed.
+   - You can download it from [python.org](https://www.python.org/).
+
+2. **Install dbt-core:**
+   - Install dbt using pip:
+     ```bash
+     pip install dbt-core
+     ```
+
+3. **Install the SQLite adapter for dbt:**
+   - Install the `dbt-sqlite` adapter:
+     ```bash
+     pip install dbt-sqlite
+     ```
+
+4. **Clone the repository:**
+   - Clone this project to your local machine:
+     ```bash
+     git clone <repository_url>
+     cd dbt_northwind
+     ```
+
+### Configuration
+
+1. **Use the provided `profiles.yml`:**
+   - This project includes a pre-configured `profiles.yml` file in the repository under the `config/` directory.
+   - Instead of modifying your global dbt `profiles.yml`, set the `DBT_PROFILES_DIR` environment variable to point to the `config/` directory:
+     ```bash
+     export DBT_PROFILES_DIR=$(pwd)/config
+     ```
+
+### Reviewing the SQL
+
+1. **Compile the models:**
+   - To generate the raw SQL files from the dbt models without executing them, use:
+     ```bash
+     dbt compile
+     ```
+
+2. **Locate the compiled SQL files:**
+   - Compiled SQL files will be located in the `target/compiled/` directory within the project folder.
+
+### Running the Project
+
+1. **Initialize the dbt project:**
+   - Run the following command to ensure dbt recognizes the project:
+     ```bash
+     dbt debug
+     ```
+
+2. **Run dbt models:**
+   - To execute the dbt models and generate results:
+     ```bash
+     dbt run
+     ```
+
+3. **View dbt documentation:**
+   - To generate and view the project documentation:
+     ```bash
+     dbt docs generate
+     dbt docs serve
+     ```
+
+### Additional Notes
+
+- Ensure all dependencies are installed and up-to-date.
+- If you encounter any issues, ensure the `DBT_PROFILES_DIR` environment variable is correctly set.
