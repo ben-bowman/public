@@ -40,6 +40,12 @@ Follow these instructions to set up and run the dbt_northwind project.
      export DBT_PROFILES_DIR=$(pwd)/config
      ```
 
+2. **Install project dependencies:**
+   - This project includes a dependency dbt_utils (specified in `packages.yml`), ensure you install it using:
+     ```bash
+     dbt deps
+     ```
+
 ### Reviewing the SQL
 
 1. **Compile the models:**
@@ -49,7 +55,7 @@ Follow these instructions to set up and run the dbt_northwind project.
      ```
 
 2. **Locate the compiled SQL files:**
-   - Compiled SQL files will be located in the `target/compiled/` directory within the project folder.
+   - Compiled SQL files will be located in the `public\dbt_northwind\target\compiled\dbt_northwind\models\` directory within the project folder.
 
 ### Running the Project
 
@@ -65,14 +71,15 @@ Follow these instructions to set up and run the dbt_northwind project.
      dbt run
      ```
 
-3. **View dbt documentation:**
+3. **Run dbt tests:**
+   - To validate the models and ensure data integrity, run the tests included in the project:
+     ```bash
+     dbt test
+     ```
+
+4. **View dbt documentation:**
    - To generate and view the project documentation:
      ```bash
      dbt docs generate
      dbt docs serve
      ```
-
-### Additional Notes
-
-- Ensure all dependencies are installed and up-to-date.
-- If you encounter any issues, ensure the `DBT_PROFILES_DIR` environment variable is correctly set.
