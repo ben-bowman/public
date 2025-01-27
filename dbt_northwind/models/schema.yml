@@ -44,6 +44,14 @@ sources:
             tests:
               - not_null
               - unique
+      - name: shippers
+        description: "Contains info on each shipping company used."
+        columns:
+          - name: shipperid
+            description: "Unique identifier for each shipper."
+            tests:
+              - not_null
+              - unique
 
 models:
   - name: employee_sales_performance
@@ -98,3 +106,23 @@ models:
         description: "The total sales value for the customer."
       - name: avg_order_value
         description: "The average value of the customer's orders."
+
+  - name: cheapest_shipper_by_region
+    description: "Compares single product orders among shippers. Not enough orders."
+    tests:
+       - dbt_utils.unique_combination_of_columns:
+           combination_of_columns:
+             - productid
+             - freight_company
+             - shipregion
+    columns:
+      - name: productid
+        description: "Unique identifier for each product."
+      - name: freight_company
+        description: "Name of the shipping company."
+      - name: shipregion
+        description: "Geographic region the order is shipped to."
+      - name: avg_freight_per_unit
+        description: "Average cost per unit to ship the order."
+      - name: cheapest_shipper_for_region
+        description: "Shipping companies ranked cheapest to most expensive for each product and region."
