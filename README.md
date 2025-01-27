@@ -1,7 +1,7 @@
 
 # Ben Bowman - Data Analytics Product Leader
 
-Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include... [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind) and  containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard). Feedback is always welcome.
+Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include a [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind) and a containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard). Feedback is always welcome.
 
 ## Professional Summary
 
