@@ -1,7 +1,7 @@
 
 # Ben Bowman - Data Analytics Product Leader
 
-Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include a [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind) and a containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard). Feedback is always welcome.
+Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include a [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind) and a containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard) as well as a [U.S. Economic Dashboard](https://bens-econ-dash.streamlit.app/) that visualizes key economic trends. Feedback is always welcome.
 
 ## Professional Summary
 
@@ -73,8 +73,8 @@ Bachelor of Science in Business Management, Finance | GPA: 3.97 (Magna Cum Laude
 
 ## Projects
 Explore the repository to see examples of:
-- Data visualization and dashboard development.
-- SQL queries and dbt models for data transformation.
-- Machine learning projects and statistical analyses.
+- **Data visualization and dashboard development**, including the [U.S. Economic Dashboard](https://bens-econ-dash.streamlit.app/).
+- **A/B Testing Dashboard**, upload your data or use example data for test statistics.
+- **SQL queries and dbt models** for data transformation.
 
 Feel free to reach out or connect with me on [LinkedIn](https://linkedin.com/in/btbowman) for more information or collaboration opportunities.
