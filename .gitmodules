@@ -1,0 +1,3 @@
+[submodule "economic_dashboard"]
+	path = economic_dashboard
+	url = https://github.com/ben-bowman/economic_dashboard.git
