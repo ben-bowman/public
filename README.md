@@ -29,7 +29,7 @@ I am a seasoned Principal Product Manager with over a decade of experience in da
 ## Experience
 
 ### **Principal Product Manager, Data Models and Analytics**
-**Doxo | 2022 – 2025**
+**Doxo | 2022 – Present**
 - Spearheaded the development of doxoINSIGHTS, featured in Business Insider, CNBC, Fortune, and more.
 - Consolidated 250+ unmanaged datasets into 15 canonical data assets, reducing costs by $67,000 annually.
 - Built and maintained 30+ datasets and ETL pipelines using dbt, SQL, Python, Airflow, and Snowflake.
@@ -77,4 +77,4 @@ Explore the repository to see examples of:
 - **A/B Testing Dashboard**, upload your data or use example data for test statistics.
 - **SQL queries and dbt models** for data transformation.
 
-Feel free to reach out or connect with me on [LinkedIn](https://linkedin.com/in/btbowman) for more information or collaboration opportunities.
+Feel free to reach out or connect with me on [LinkedIn](https://linkedin.com/in/btbowman) for more information or collaboration opportunities. You can also contact me at [benbowman.io](https://www.benbowman.io).
