@@ -5,7 +5,7 @@ SELECT
     p.ProductName,
     p.CategoryID,
     SUM(od.Quantity) AS total_quantity_sold,
-    SUM((od.UnitPrice * od.Quantity * (1-od.Discount)) AS total_revenue,
+    SUM(od.UnitPrice * od.Quantity * (1-od.Discount)) AS total_revenue,
     p.UnitsInStock,
     p.UnitsOnOrder
 FROM {{ source('northwind', 'order_details') }} AS od
