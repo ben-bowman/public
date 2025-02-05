@@ -36,9 +36,19 @@ Follow these instructions to set up and run the dbt_northwind project.
 1. **Use the provided `profiles.yml`:**
    - This project includes a pre-configured `profiles.yml` file in the repository under the `config/` directory.
    - Instead of modifying your global dbt `profiles.yml`, set the `DBT_PROFILES_DIR` environment variable to point to the `config/` directory:
-     ```bash
-     export DBT_PROFILES_DIR=~public/config
-     ```
+
+   **For Linux/macOS:**
+   ```bash
+   export DBT_PROFILES_DIR=~/public/config
+   ```
+   **For Windows (Command Prompt):**
+   ```bash
+   set DBT_PROFILES_DIR=%USERPROFILE%\public\config
+   ```
+   **For Windows (PowerShell):**
+   ```bash
+   $env:DBT_PROFILES_DIR = "$env:USERPROFILE\public\config"
+   ```
 
 2. **Install project dependencies:**
    - This project includes a dependency dbt_utils (specified in `packages.yml`), ensure you install it using:

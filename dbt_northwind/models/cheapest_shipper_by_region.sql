@@ -15,6 +15,7 @@ select
    o.ShipRegion,
    sum(o.Freight)/sum(od.Quantity) as avg_freight_per_unit,
    ROW_NUMBER() over(partition by pc.productid, o.shipregion) as cheapest_shipper_for_region,
+   julianday(o.ShippedDate) - julianday(o.OrderDate) AS fulfillment_days,
    count(*) as n -- this shows there really isn't enough single product orders to decide the cheapest shipper
 from product_cnt pc
 join {{ source('northwind', 'order_details') }} od on pc.orderid = od.orderid
