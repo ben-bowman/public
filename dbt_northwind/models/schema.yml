@@ -102,13 +102,41 @@ models:
         description: "Unique identifier for each customer."
         tests:
           - not_null
+      - name: total_orders
+        description: "Total number of orders placed by the customer."
       - name: total_sales
-        description: "The total sales value for the customer."
+        description: "Total amount spent by the customer."
       - name: avg_order_value
         description: "The average value of the customer's orders."
+      - name: last_order_date
+        description: "Date of the most recent order placed by the customer."
+
+  - name: sales_summary
+    description: "Summarizes total sales per order, including discounts."
+    columns:
+      - name: orderid
+        description: "Unique identifier for each order."
+        tests:
+          - not_null
+      - name: customerid
+        description: "Unique identifier for the customer."
+      - name: total_order_value
+        description: "Total value of the order after discounts."
+
+  - name: product_performance
+    description: "Analyzes product sales, revenue, and stock levels."
+    columns:
+      - name: productid
+        description: "Unique identifier for each product."
+        tests:
+          - not_null
+      - name: total_quantity_sold
+        description: "Total quantity sold for the product."
+      - name: total_revenue
+        description: "Total revenue generated from the product."
 
   - name: cheapest_shipper_by_region
-    description: "Compares single product orders among shippers. Not enough orders."
+    description: "Finds the cheapest shipping company per region for single-product orders."
     tests:
        - dbt_utils.unique_combination_of_columns:
            combination_of_columns:
@@ -118,11 +146,16 @@ models:
     columns:
       - name: productid
         description: "Unique identifier for each product."
+        tests:
+          - not_null
       - name: freight_company
         description: "Name of the shipping company."
       - name: shipregion
         description: "Geographic region the order is shipped to."
       - name: avg_freight_per_unit
-        description: "Average cost per unit to ship the order."
+        description: "Average freight cost per unit for the product in the region."
       - name: cheapest_shipper_for_region
-        description: "Shipping companies ranked cheapest to most expensive for each product and region."
+        description: "Indicates the cheapest shipping company for this product in the region."
+      - name: total_orders
+        description: "Total number of single-product orders analyzed for this shipper."
+
