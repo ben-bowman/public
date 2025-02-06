@@ -159,3 +159,21 @@ models:
       - name: total_orders
         description: "Total number of single-product orders analyzed for this shipper."
 
+  - name: price_variation
+    description: "Tracks net price variations per product over time, including total quantity sold at each price point."
+    columns:
+      - name: order_year
+        description: "Year of the order."
+      - name: productid
+        description: "Unique identifier for each product."
+        tests:
+          - not_null
+      - name: productname
+        description: "Name of the product."
+      - name: net_price
+        description: "Final product price after discount."
+      - name: total_quantity_sold
+        description: "Total quantity sold at this net price."
+      - name: total_orders
+        description: "Number of orders that included this product at this price."
+
