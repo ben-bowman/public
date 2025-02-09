@@ -7,7 +7,8 @@ a fitted demand curve), analyzes price elasticity, and then displays the
 results and model performance in an interactive Streamlit dashboard.
 
 Assumptions:
-- The SQLite database is named "Northwind.sqlite" and is located in the same directory.
+- The SQLite database is located in the 'data' folder (one level above this script's directory) 
+  and is named "dbt_output.db".
 - The table "price_variation" exists and includes the following columns:
     - OrderID (int)
     - OrderDate (string or date) — will be parsed as a datetime
@@ -17,13 +18,14 @@ Assumptions:
     - net_price (float)
     - total_quantity_sold (int)
     - total_orders (int)
+    - CategoryName (string)
 - A product must have at least 15 records to have a recommendation generated.
 """
 
+from pathlib import Path
 import os
 import sqlite3
 from datetime import datetime
-from pathlib import Path
 
 import numpy as np
 import pandas as pd
@@ -43,19 +45,12 @@ COST_FACTOR = 0.7           # Estimated cost is 70% of the current net price
 # -------------------------------
 # Data Loading and Preprocessing
 # -------------------------------
-try:
-    current_dir = Path(__file__).parent
-except NameError:
-    current_dir = Path(os.getcwd())
-
-db_path = current_dir.parent / 'data' / 'dbt_output.db'
-
 def load_data(db_path):
     """
     Connect to the SQLite database and load the price_variation table into a DataFrame.
     
     Parameters:
-        db_path (str): Full path to the SQLite database file.
+        db_path (str or Path): Full path to the SQLite database file.
     
     Returns:
         pd.DataFrame: DataFrame containing the data from price_variation.
@@ -90,8 +85,7 @@ def preprocess_data(df):
 
 def filter_by_category(df):
     """
-    If a 'Category' column exists in the DataFrame, add a sidebar filter to let the user
-    select one or more categories.
+    Filter the DataFrame by CategoryName using a sidebar multiselect filter.
     
     Parameters:
         df (pd.DataFrame): The DataFrame to filter.
@@ -99,10 +93,10 @@ def filter_by_category(df):
     Returns:
         pd.DataFrame: The filtered DataFrame.
     """
-    if 'Category' in df.columns:
-        categories = sorted(df['Category'].unique())
-        selected_categories = st.sidebar.multiselect("Select Product Categories", categories, default=categories)
-        df = df[df['Category'].isin(selected_categories)]
+    # Assume that the "CategoryName" column exists
+    categories = sorted(df["CategoryName"].unique())
+    selected_categories = st.sidebar.multiselect("Select Product Categories", categories, default=categories)
+    df = df[df["CategoryName"].isin(selected_categories)]
     return df
 
 # -------------------------------
@@ -252,12 +246,13 @@ def get_recommendations(df, sufficient_products):
             recommended_price = np.clip(optimal_price, min_price, max_price)
             recommended_price = max(recommended_price, cost_estimate)
         
-        # Compute elasticity at the current net_price
-        elasticity = compute_price_elasticity(a, b, current_price)
+        # Retrieve the product's category from the "CategoryName" column
+        product_category = df_product["CategoryName"].iloc[0]
         
         recommendations.append({
             'ProductID': product_id,
             'ProductName': df_product['ProductName'].iloc[0],
+            'CategoryName': product_category,
             'CurrentPrice': round(current_price, 2),
             'RecommendedPrice': round(recommended_price, 2),
             'ObservedMinPrice': round(min_price, 2),
@@ -265,7 +260,8 @@ def get_recommendations(df, sufficient_products):
             'EstimatedCost': round(cost_estimate, 2),
             'R2': round(r2, 2),
             'RMSE': round(rmse, 2),
-            'Elasticity (at Current Price)': round(elasticity, 2) if elasticity is not None else None
+            'Elasticity (at Current Price)': round(
+                elasticity, 2) if (elasticity := compute_price_elasticity(a, b, current_price)) is not None else None
         })
     return pd.DataFrame(recommendations)
 
@@ -280,16 +276,18 @@ def main():
     # -------------------------------
     # Dynamic File Path Setup
     # -------------------------------
-    # The database file is assumed to be in the same directory as this script.
-    current_dir = os.getcwd()
-    db_filename = "Northwind.sqlite"  # Change this if your database file has a different name or location
-    db_path = os.path.join(current_dir, db_filename)
+    try:
+        current_dir = Path(__file__).parent
+    except NameError:
+        current_dir = Path(os.getcwd())
+    
+    db_path = current_dir.parent / 'data' / 'dbt_output.db'
     
     # -------------------------------
     # Data Loading
     # -------------------------------
     st.sidebar.header("Data Loading")
-    with st.sidebar.spinner("Loading data from SQLite database..."):
+    with st.spinner("Loading data from SQLite database..."):
         df = load_data(db_path)
     if df.empty:
         st.error("No data loaded. Please check the database connection and table name.")
@@ -300,7 +298,7 @@ def main():
     # Data Preprocessing
     # -------------------------------
     df = preprocess_data(df)
-    df = filter_by_category(df)  # Applies category filtering if 'Category' exists
+    df = filter_by_category(df)  # Applies filtering using "CategoryName"
     
     # Date Range Filter (if the OrderDate column exists)
     if 'OrderDate' in df.columns:
@@ -333,14 +331,15 @@ def main():
         - An estimated cost (assumed to be 70% of the current net price)
         - Model performance metrics (R² and RMSE from a time-based test set)
         - Price elasticity at the current net price
+        - Product category (from CategoryName)
         """
     )
     st.dataframe(recommendations_df)
     
     st.subheader("Products with Insufficient Data")
     if insufficient_products:
-        # Summarize insufficient data products (showing ProductID, ProductName and record count)
-        df_insuff = df[df['ProductID'].isin(insufficient_products)].groupby(['ProductID', 'ProductName']).size().reset_index(name='RecordCount')
+        # Summarize insufficient data products (showing ProductID, ProductName, CategoryName, and record count)
+        df_insuff = df[df['ProductID'].isin(insufficient_products)].groupby(['ProductID', 'ProductName', 'CategoryName']).size().reset_index(name='RecordCount')
         st.dataframe(df_insuff)
     else:
         st.write("All products have sufficient data for recommendation.")
