@@ -4,6 +4,7 @@ logs/
 # dbt-specific directories
 target/
 dbt_modules/
+dbt_packages/
 
 # Environment files
 .env
