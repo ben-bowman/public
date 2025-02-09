@@ -46,18 +46,24 @@ COST_FACTOR = 0.7  # Estimated cost is 70% of the current net price
 # Data Loading and Preprocessing
 # -------------------------------
 def load_data(db_path):
-    """
-    Connect to the SQLite database and load the price_variation table into a DataFrame.
-    
-    Parameters:
-        db_path (str or Path): Full path to the SQLite database file.
-    
-    Returns:
-        pd.DataFrame: DataFrame containing the data from price_variation.
+    query = """
+        SELECT 
+            od.OrderID,
+            o.OrderDate,
+            strftime('%Y', o.OrderDate) AS order_year,
+            od.ProductID,
+            p.ProductName,
+            p.CategoryID,
+            c.CategoryName,
+            ROUND(od.UnitPrice * (1 - od.Discount), 2) AS net_price,
+            od.Quantity AS total_quantity_sold
+        FROM "Order Details" od
+        JOIN products p ON od.ProductID = p.ProductID
+        JOIN orders o ON od.OrderID = o.OrderID
+        JOIN categories c ON p.CategoryID = c.CategoryID
     """
     try:
         conn = sqlite3.connect(db_path)
-        query = "SELECT * FROM price_variation"
         df = pd.read_sql_query(query, conn)
     except Exception as e:
         st.error(f"Error loading data: {e}")
@@ -71,12 +77,6 @@ def preprocess_data(df):
     Preprocess the data by:
       - Converting 'OrderDate' to datetime.
       - Cleaning and converting 'net_price' to numeric.
-    
-    Parameters:
-        df (pd.DataFrame): Raw DataFrame.
-    
-    Returns:
-        pd.DataFrame: Preprocessed DataFrame.
     """
     df = df.copy()  # Avoid modifying a view
     
@@ -98,14 +98,7 @@ def preprocess_data(df):
 def filter_by_category(df):
     """
     Filter the DataFrame by CategoryName using a sidebar multiselect filter.
-    
-    Parameters:
-        df (pd.DataFrame): The DataFrame to filter.
-    
-    Returns:
-        pd.DataFrame: The filtered DataFrame.
     """
-    # Use .copy() to avoid chained assignment warnings
     df = df.copy()
     categories = sorted(df["CategoryName"].unique())
     selected_categories = st.sidebar.multiselect("Select Product Categories", categories, default=categories)
@@ -119,13 +112,6 @@ def train_model_for_product(df_product):
     """
     Train a linear regression model to predict total_quantity_sold from net_price for a single product.
     The first 70% of the time-ordered data is used for training and the remaining 30% for testing.
-    
-    Returns:
-        model (LinearRegression): The fitted regression model.
-        a (float): Intercept.
-        b (float): Coefficient for net_price.
-        r2 (float): R-squared on the test set.
-        rmse (float): Root Mean Squared Error on the test set.
     """
     df_product = df_product.sort_values(by='OrderDate').copy()
     n = len(df_product)
@@ -153,9 +139,6 @@ def train_model_for_product(df_product):
 def compute_optimal_price(a, b):
     """
     Compute the optimal price that maximizes revenue based on the demand model Q = a + b * p.
-    
-    Returns:
-        float or None: The revenue-maximizing price or None if b is zero.
     """
     if b == 0:
         return None
@@ -164,9 +147,6 @@ def compute_optimal_price(a, b):
 def compute_price_elasticity(a, b, price):
     """
     Compute the price elasticity of demand at a given price.
-    
-    Returns:
-        float or None: The elasticity value or None if division by zero occurs.
     """
     Q = a + b * price
     if Q == 0:
@@ -179,9 +159,6 @@ def compute_price_elasticity(a, b, price):
 def get_products_with_sufficient_data(df, threshold):
     """
     Identify products that have at least 'threshold' records.
-    
-    Returns:
-        tuple: (sufficient_products, insufficient_products) as lists of ProductIDs.
     """
     product_counts = df['ProductID'].value_counts()
     sufficient_products = product_counts[product_counts >= threshold].index.tolist()
@@ -192,9 +169,6 @@ def get_recommendations(df, sufficient_products):
     """
     For each product with sufficient data, train the model, compute the revenue-maximizing price,
     adjust the price based on cost considerations, and compute performance and elasticity metrics.
-    
-    Returns:
-        pd.DataFrame: Recommendations and metrics for each product.
     """
     recommendations = []
     for product_id in sufficient_products:
@@ -338,10 +312,18 @@ def main():
         ax.legend()
         st.pyplot(fig)
         
-        # Plot Demand Curve
-        st.header("Historical Data and Demand Curve")
-        st.markdown("The plot below shows the historical relationship between net_price and total_quantity_sold (demand) for the selected product. "
-                    "The fitted demand curve (from the regression model) is overlaid in orange.")
+        # Calculate elasticity at the current price and display it with interpretation
+        current_elasticity = compute_price_elasticity(a, b, current_price)
+        st.write(f"**Elasticity at the current price:** {current_elasticity:.2f}")
+        st.markdown("""
+        **Interpretation of Price Elasticity:**
+        - **Elastic Demand:** If the absolute value of elasticity is greater than 1, a 1% change in price will lead to more than a 1% change in quantity demanded. This indicates that demand is very sensitive to price changes.
+        - **Inelastic Demand:** If the absolute value of elasticity is less than 1, a 1% change in price will result in less than a 1% change in quantity demanded. This means that demand is relatively insensitive to price changes.
+        - **Unit Elastic Demand:** If the elasticity is approximately equal to 1, a 1% change in price leads to a 1% change in quantity demanded.
+        """)
+        
+        st.subheader("Historical Data and Demand Curve")
+        st.markdown("The plot below shows the historical relationship between net_price and total_quantity_sold (demand) for the selected product. The fitted demand curve (from the regression model) is overlaid in orange.")
         fig2, ax2 = plt.subplots(figsize=(8, 4))
         sns.scatterplot(data=df_product, x='net_price', y='total_quantity_sold', ax=ax2, label="Historical Data")
         X_range = price_range.reshape(-1, 1)
@@ -356,11 +338,6 @@ def main():
         st.subheader("Model Performance (Test Set)")
         st.write(f"R-squared: {r2:.2f}")
         st.write(f"RMSE: {rmse:.2f}")
-        st.markdown("""
-        **Interpretation:**
-        - **R-squared:** This metric indicates the proportion of variance in the total quantity sold that is explained by the net price. A value closer to 1 suggests that the model explains most of the variability in the data, while a lower value indicates a poorer fit.
-        - **RMSE (Root Mean Squared Error):** This metric represents the average magnitude of the prediction error in the same units as total quantity sold. Lower RMSE values indicate that the model's predictions are more accurate.
-        """)
     else:
         st.info("No products with sufficient data available for elasticity analysis.")
 
