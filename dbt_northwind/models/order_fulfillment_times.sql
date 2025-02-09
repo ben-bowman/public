@@ -26,4 +26,3 @@ select
       end as fulfillment_flag
 from variances v
 join order_times ot on v.orderid = ot.orderid
-
