@@ -39,15 +39,15 @@ Follow these instructions to set up and run the dbt_northwind project.
 
    **For Linux/macOS:**
    ```bash
-   export DBT_PROFILES_DIR=~/public/config
+   export DBT_PROFILES_DIR=~/public/dbt_northwind/config
    ```
    **For Windows (Command Prompt):**
    ```bash
-   set DBT_PROFILES_DIR=%USERPROFILE%\public\config
+   set DBT_PROFILES_DIR=%USERPROFILE%\public\dbt_northwind\config
    ```
    **For Windows (PowerShell):**
    ```bash
-   $env:DBT_PROFILES_DIR = "$env:USERPROFILE\public\config"
+   $env:DBT_PROFILES_DIR = "$env:USERPROFILE\public\dbt_northwind\config"
    ```
 
 2. **Install project dependencies:**

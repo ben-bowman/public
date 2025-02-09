@@ -1,7 +1,12 @@
 
 # Ben Bowman - Data Analytics Product Leader
 
-Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include a [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind) and a containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard) as well as a [U.S. Economic Dashboard](https://bens-econ-dash.streamlit.app/) that visualizes key economic trends. Feedback is always welcome.
+Welcome to my GitHub repository showcasing examples of my work and professional journey. Here, you will find a collection of projects, code, and contributions that highlight my expertise in data analytics, engineering, and product management. Projects include:
+- [DBT Example](https://github.com/ben-bowman/public/tree/master/dbt_northwind)
+- containerized Streamlit [a/b testing app](https://github.com/ben-bowman/public/tree/master/a_b_testing_dashboard)
+- [U.S. Economic Dashboard](https://bens-econ-dash.streamlit.app/) that gets data from public api's and visualizes key economic trends
+- [Sales Forecast](https://github.com/ben-bowman/public/tree/master/sales_forecast) using ARIMA
+Feedback is always welcome.
 
 ## Professional Summary
 
@@ -76,5 +81,6 @@ Explore the repository to see examples of:
 - **Data visualization and dashboard development**, including the [U.S. Economic Dashboard](https://bens-econ-dash.streamlit.app/).
 - **A/B Testing Dashboard**, upload your data or use example data for test statistics.
 - **SQL queries and dbt models** for data transformation.
+- **Annual Sales Forecasting**: A simple exercise in time series forecasting using ARIMA on the Northwind dataset. This project demonstrates the process of extracting, aggregating, and forecasting sales data, culminating in a visualization of forecasted annual sales. While the dataset is limited, this serves as a hands-on example of forecasting techniques and visualization in Python.
 
 Feel free to reach out or connect with me on [LinkedIn](https://linkedin.com/in/btbowman) for more information or collaboration opportunities. You can also contact me at [benbowman.io](https://www.benbowman.io).
