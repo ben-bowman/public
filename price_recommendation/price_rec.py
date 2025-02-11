@@ -269,7 +269,14 @@ def main():
     # Price Elasticity Analysis Section
     if not recommendations_df.empty:
         product_names = sorted(recommendations_df['ProductName'].tolist())
-        selected_product_name = st.selectbox("Select a product from the dropdown to view a price recommendation, elasticity, and demand curve.", product_names)
+
+        # Define a default product name (change "Product X" to your desired default)
+        default_product = "Chang"
+        default_index = product_names.index(default_product) if default_product in product_names else 0
+
+        # Create the selectbox with the default index
+        selected_product_name = st.selectbox("Select a product from the dropdown to view a price recommendation, elasticity, and demand curve.", product_names, index=default_index)
+        
         selected_product_id = recommendations_df.loc[
             recommendations_df['ProductName'] == selected_product_name, 'ProductID'
         ].iloc[0]
