@@ -52,6 +52,14 @@ sources:
             tests:
               - not_null
               - unique
+      - name: categories
+        description: "Contains info on each shipping company used."
+        columns:
+          - name: categoryid
+            description: "Unique identifier for each product category."
+            tests:
+              - not_null
+              - unique
 
 models:
   - name: employee_sales_performance
@@ -169,7 +177,13 @@ models:
         tests:
           - not_null
       - name: productname
-        description: "Name of the product."
+        description: "Name of the product."      
+      - name: categoryid
+        description: "Unique identifier for each product category."
+        tests:
+          - not_null
+      - name: categoryname
+        description: "Name of the product category."
       - name: net_price
         description: "Final product price after discount."
       - name: total_quantity_sold

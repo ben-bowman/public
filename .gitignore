@@ -4,6 +4,7 @@ logs/
 # dbt-specific directories
 target/
 dbt_modules/
+dbt_packages/
 
 # Environment files
 .env
@@ -14,6 +15,7 @@ __pycache__/
 *.pyc
 *.pyo
 *.pyd
+**/.ipynb_checkpoints/
 
 # macOS-specific files
 .DS_Store
