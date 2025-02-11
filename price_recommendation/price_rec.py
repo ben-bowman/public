@@ -1,19 +1,18 @@
 """
 Pricing Recommendation Dashboard
 
-This script loads historical pricing and sales data from a SQLite database,
+This script loads historical pricing and sales data from a SQLite northwind database,
 builds per-product pricing recommendation models that optimize profit (via
 a fitted demand curve that incorporates cost data), analyzes price elasticity,
 and then displays the results and model performance in an interactive Streamlit dashboard.
 
 Assumptions:
 - The SQLite database is located in the 'data' folder (one level above this script's directory)
-  and is named "dbt_output.db".
+  and is named "northwind.db".
 - The SQL query returns individual order details from the "Order Details" table,
   along with OrderDate, ProductID, ProductName, net_price (after applying discount),
   total_quantity_sold, and CategoryName.
-- A product must have at least one record to be included.
-- Crude Cost Assumption: If actual cost data is not available, cost is assumed to be a percentage
+- Crude Cost Assumption: Actual cost data is not available, so cost is assumed to be a percentage
   of the net price. This percentage is set by the user via a sidebar slider (default 15%).
 """
 
@@ -161,7 +160,7 @@ def compute_price_elasticity(a, b, price):
 def get_products_with_sufficient_data(df, threshold=1):
     """
     Identify products that have at least 'threshold' records.
-    Since individual products now have many records, we use threshold=1 to include all.
+    Since individual products all have >7000 records, we use threshold=1 to include all.
     """
     product_counts = df['ProductID'].value_counts()
     sufficient_products = product_counts[product_counts >= threshold].index.tolist()
@@ -226,14 +225,14 @@ def get_recommendations_with_cost(df, sufficient_products, cost_factor):
 # -------------------------------
 def main():
     st.set_page_config(page_title="Pricing Recommendation Dashboard", layout="wide")
-    st.title("Pricing Recommendation and Price Elasticity Dashboard")
+    st.title("Pricing Recommendation Dashboard")
 
     # Dynamic File Path Setup
     try:
         current_dir = Path(__file__).parent
     except NameError:
         current_dir = Path(os.getcwd())
-    db_path = current_dir.parent / 'data' / 'dbt_output.db'
+    db_path = current_dir.parent / 'data' / 'northwind.db'
 
     # Sidebar: Data Loading Header
     st.sidebar.header("Data Loading")
@@ -267,29 +266,10 @@ def main():
     sufficient_products, _ = get_products_with_sufficient_data(df, threshold=1)
     recommendations_df = get_recommendations_with_cost(df, sufficient_products, cost_factor)
 
-    # Display Recommendations Table
-    st.header("Pricing Recommendations")
-    st.markdown(
-        """
-        The table below shows, for each product with sufficient historical data:
-        - The current net price (most recent record)
-        - The recommended price (profit-maximizing, using cost data if available)
-        - The observed net price range (min and max net prices)
-        - The cost (calculated as Cost Per Unit % of current net price)
-        - The current profit margin (based on current price and cost)
-        - Model performance metrics (R² and RMSE from a time-based test set)
-        - Price elasticity at the current net price
-        - Product category (from CategoryName)
-        """
-    )
-    st.dataframe(recommendations_df)
-
     # Price Elasticity Analysis Section
-    st.header("Price Elasticity Analysis")
-    st.markdown("Select a product from the dropdown below to view its price elasticity and demand curve.")
     if not recommendations_df.empty:
-        product_names = recommendations_df['ProductName'].tolist()
-        selected_product_name = st.selectbox("Select a Product", product_names)
+        product_names = sorted(recommendations_df['ProductName'].tolist())
+        selected_product_name = st.selectbox("Select a product from the dropdown to view a price recommendation, elasticity, and demand curve.", product_names)
         selected_product_id = recommendations_df.loc[
             recommendations_df['ProductName'] == selected_product_name, 'ProductID'
         ].iloc[0]
@@ -298,6 +278,7 @@ def main():
             recommendations_df['ProductID'] == selected_product_id, 'RecommendedPrice'
         ].iloc[0]
         st.write(f"**Recommended Price for {selected_product_name}: ${recommended_price:.2f}**")
+        st.header("Price Elasticity Analysis")
 
         df_product = df[df['ProductID'] == selected_product_id].sort_values(by='OrderDate').copy()
         product_name = df_product['ProductName'].iloc[0]
@@ -356,10 +337,9 @@ def main():
         ax2_profit.plot(price_range, profit_values, color='purple', linestyle='--', label="Profit ($)")
         ax2_profit.set_ylabel("Profit ($)")
 
-        # Find the price corresponding to maximum profit
+        # Add a vertical line at the price corresponding to maximum profit
         max_profit_index = np.argmax(profit_values)
         max_profit_price = price_range[max_profit_index]
-        # Add a vertical line at the max profit price
         ax2.axvline(x=max_profit_price, color='magenta', linestyle=':', label="Max Profit Price")
 
         # Combine legends from both axes
@@ -368,12 +348,34 @@ def main():
         ax2.legend(lines1 + lines2, labels1 + labels2, loc='upper left')
 
         st.pyplot(fig2)
-
+        st.markdown("""
+        **Interpretation of Demand and Profit:**
+        - **Demand Curve:** Demand is plotted as linear equation Q = a + b * p.
+        - **Cost:** Comes from the cost slider.
+        - **Profit:** Compute the profit-maximizing price given demand model and cost (C) above.
+          Profit = (p - C) * (a + b * p)
+          Optimum p* = (b * C - a) / (2b)
+        """)
         st.subheader("Model Performance (Test Set)")
+        st.markdown("""
+        **R² (Coefficient of Determination):** R² a measure of how much the model explains what we see in the data. An R² close to 1 means that most of Q is explained by price (good). An R² near 0 means little is explained by price (bad).
+    
+        **RMSE (Root Mean Squared Error):** the average difference between the predicted and observed values. A lower RMSE suggests a better predictive accuracy (good). A higher RMSE suggests predictions are off (bad).
+""")
+
         st.write(f"R-squared: {r2:.2f}")
         st.write(f"RMSE: {rmse:.2f}")
     else:
         st.info("No products with sufficient data available for elasticity analysis.")
+
+    # Move the Summary Price Recommendations to the bottom
+    st.header("Summary Price Recommendations")
+    st.markdown(
+        "The table below summarizes the pricing recommendations based on the profit-maximizing model "
+        "and the cost assumption (Cost Per Unit % slider). This summary helps you review the recommended "
+        "prices, the current profit margins, and model performance metrics for each product."
+    )
+    st.dataframe(recommendations_df)
 
 if __name__ == '__main__':
     main()
