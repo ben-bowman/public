@@ -1,7 +1,7 @@
 
 # A/B Testing Dashboard
 
-This is a containerized Streamlit application for performing A/B testing. It allows users to upload their data, select control and treatment groups, and analyze the results using statistical tests. The tool also provides visualizations of the data and actionable conclusions based on statistical significance.
+This is a containerized Streamlit application for performing A/B testing. It allows users to upload their own data, select control and treatment groups, and analyze the results using t test. The tool also provides visualizations of the data and actionable conclusions based on statistical significance (P-value). There is default sample data included in the repo. You can also see the dashboard on [Streamlit Cloud](https://https://a-b-test.streamlit.app/).
 
 ## Features
 - Upload CSV data files.
