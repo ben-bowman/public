@@ -9,7 +9,7 @@ st.title("A/B Testing Dashboard")
 # Function to load default dataset
 @st.cache_data
 def load_default_data():
-    return pd.read_csv("data/your_data.csv")  # Adjust the path if needed
+    return pd.read_csv("data/sample_data.csv")  # Adjust the path if needed
 
 # Sidebar for file upload
 st.sidebar.header("Upload Data")
