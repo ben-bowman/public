@@ -2,22 +2,27 @@ import streamlit as st
 import gspread
 import pandas as pd
 import plotly.graph_objects as go
-from oauth2client.service_account import ServiceAccountCredentials
-from io import StringIO
+from google.oauth2.service_account import Credentials
 
-# Google Sheets credentials JSON file (Ensure this file is in the same directory or use environment variables)
-GOOGLE_SHEET_CREDENTIALS = "service_account.json"
+# Google Sheets settings
 SHEET_NAME = "sankey_chart_data"
 WORKSHEET_NAME = "Sheet1"  # Change if necessary
 
 # Function to load Google Sheet
 @st.cache_data(ttl=600)  # Refresh every 10 minutes
 def load_google_sheet():
-    scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
-    creds = ServiceAccountCredentials.from_json_keyfile_name(GOOGLE_SHEET_CREDENTIALS, scope)
+    # Load credentials from Streamlit secrets
+    service_account_info = st.secrets["gcp_service_account"]
+    creds = Credentials.from_service_account_info(service_account_info, scopes=[
+        "https://spreadsheets.google.com/feeds",
+        "https://www.googleapis.com/auth/drive"
+    ])
+    
+    # Authorize with gspread
     client = gspread.authorize(creds)
     sheet = client.open(SHEET_NAME).worksheet(WORKSHEET_NAME)
     data = sheet.get_all_records()
+    
     return pd.DataFrame(data)
 
 # Load the data
