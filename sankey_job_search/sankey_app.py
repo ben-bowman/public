@@ -78,5 +78,3 @@ else:
     )
     st.plotly_chart(sankey_fig, use_container_width=True)
 
-    # Add profile pic
-    st.image("ben-square.jpg", caption="Ben Bowman", width=150)
