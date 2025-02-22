@@ -1,0 +1,5 @@
+streamlit==1.30.0
+gspread==6.0.2
+pandas==2.1.4
+plotly==5.18.0
+oauth2client==4.1.3
