@@ -37,17 +37,32 @@ else:
     targets = df["Target"].tolist()
     values = df["Value"].tolist()
 
-    all_labels = list(set(sources + targets))
+    all_labels = list(OrderedDict.fromkeys(sources + targets))
     label_dict = {label: i for i, label in enumerate(all_labels)}
     
     source_indices = [label_dict[src] for src in sources]
     target_indices = [label_dict[tgt] for tgt in targets]
+    
+    # Custom color scheme
+    node_colors = ["#074650", "#009292", "#FE6DB6", "#FEB5DA", "#480091", "#B66DFF", "#B5DAFE", "#6DB6FF"]
+    link_colors = [
+        "rgba(7, 70, 80, 0.5)",   # Converted from "#074650"
+        "rgba(0, 146, 146, 0.5)", # Converted from "#009292"
+        "rgba(254, 109, 182, 0.5)", # Converted from "#FE6DB6"
+        "rgba(254, 181, 218, 0.5)", # Converted from "#FEB5DA"
+        "rgba(72, 0, 145, 0.5)",   # Converted from "#480091"
+        "rgba(182, 109, 255, 0.5)", # Converted from "#B66DFF"
+        "rgba(181, 218, 254, 0.5)", # Converted from "#B5DAFE"
+        "rgba(7, 70, 80, 0.5)",   # Converted from "#074650"
+        "rgba(0, 146, 146, 0.5)", # Converted from "#009292"
+        "rgba(254, 109, 182, 0.5)", # Converted from "#FE6DB6"
+        "rgba(254, 181, 218, 0.5)", # Converted from "#FEB5DA"
+        "rgba(72, 0, 145, 0.5)",   # Converted from "#480091"
+        "rgba(182, 109, 255, 0.5)", # Converted from "#B66DFF"
+        "rgba(0, 0, 0, 0)" # Converted from "#6DB6FF" <- FULLY TRANSPARENT SO NO SHOW
+    ]
 
-    # New color scheme and improved text contrast
-    node_colors = ["#636EFA", "#EF553B", "#00CC96", "#AB63FA", "#FFA15A", "#19D3F3"] * (len(all_labels) // 6 + 1)
-    link_colors = ["rgba(99, 110, 250, 0.6)", "rgba(239, 85, 59, 0.6)", "rgba(0, 204, 150, 0.6)", "rgba(171, 99, 250, 0.6)"] * (len(values) // 4 + 1)
-
-    # Create Sankey Diagram with improved styling
+    # Create Sankey Diagram with custom positioning
     sankey_fig = go.Figure(go.Sankey(
         node=dict(
             pad=15,
@@ -55,6 +70,8 @@ else:
             line=dict(color="rgba(0,0,0,0)", width=0),  # Remove box around nodes
             label=all_labels,
             color=node_colors,
+            x=[0.0, 0.0, 0.0, 0.33, 0.66, .33,   1,   1],  # Custom horizontal positions
+            y=[0.3,   1, 0.9, 0.6,  0.5,    0.2, .9, 0.4],  # Adjust for better visualization
             hoverlabel=dict(bgcolor="white", font_size=16, font_family="Arial")  # Improve text contrast
         ),
         link=dict(
@@ -64,7 +81,7 @@ else:
             color=link_colors
         )
     ))
-
+    
     sankey_fig.update_layout(font=dict(size=18, color="black", family="Arial"))
 
     # Streamlit UI
