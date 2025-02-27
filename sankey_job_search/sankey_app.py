@@ -149,12 +149,8 @@ colors = ["#074650", "#009292", "#FE6DB6"]
 titles = ["Total Applications", "Avg Response Time (days)", "Days to Offer"]
 values = [total_applications, avg_response_time, days_to_offer]
 
-# icon paths
-icon_paths = ["clock_icon.png", "calendar_icon.png", "application_icon.png"]
-
-def load_icon(image_path, zoom=0.2):
-    img = plt.imread(image_path)
-    return OffsetImage(img, zoom=zoom)
+# Emojis (use a font that supports them)
+icons = ["📄", "🕞", ":date:"]
 
 # Plot metrics
 for i, ax in enumerate(axes):
@@ -167,15 +163,11 @@ for i, ax in enumerate(axes):
         boxstyle="round,pad=0.1", 
         edgecolor="black", facecolor=colors[i]
     ))
-    
-    # Load and add the image icon
-    icon_image = load_icon(icon_paths[i])
-    ab = AnnotationBbox(icon_image, (0.5, 0.75), frameon=False)  # Position above the text
-    ax.add_artist(ab)
 
-    # Add text elements
-    ax.text(0.5, 0.50, titles[i], fontsize=12, ha='center', va='center', color="white")  # Title
-    ax.text(0.5, 0.35, str(values[i]), fontsize=18, ha='center', va='center', color="white", fontweight="bold")  # Value
+    # Set font that supports emojis
+    ax.text(0.5, 0.65, icons[i], fontsize=24, fontname="Segoe UI Emoji", ha='center', va='center', color="white")
+    ax.text(0.5, 0.50, titles[i], fontsize=12, ha='center', va='center', color="white") 
+    ax.text(0.5, 0.35, str(values[i]), fontsize=18, ha='center', va='center', color="white", fontweight="bold")  
 
     # Remove axes
     ax.set_xticks([])
