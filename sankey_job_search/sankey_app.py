@@ -2,6 +2,7 @@ import streamlit as st
 import gspread
 import pandas as pd
 import plotly.graph_objects as go
+import matplotlib.pyplot as plt
 from collections import OrderedDict
 from google.oauth2.service_account import Credentials
 
@@ -95,4 +96,40 @@ else:
         "Refresh the app to get the latest data from the sheet. See more of my work at [www.benbowman.io](https://www.benbowman.io)."
     )
     st.plotly_chart(sankey_fig, use_container_width=True)
+
+# Hardcoded data
+pie_data = [
+    {
+        "labels": ["C", "VP", "Head", "Director", "Manager", "Other"], 
+        "sizes": [0.5, 6, 5, 45, 19.5, 24], 
+        "colors": ['#074650', '#009292', '#FE6DB6', '#FEB5DA', '#480091', '#B66DFF'],
+        "title": "Job Levels"
+    },
+    {
+        "labels": ["Yes", "No"], 
+        "sizes": [85, 15], 
+        "colors":  ['#FEB5DA', '#480091'],
+        "title": "Custom Cover Letter?"
+    },
+    {
+        "labels": ["Yes", "No"],
+        "sizes": [42, 298], 
+        "colors":  ['#FEB5DA', '#480091'],
+        "title": "Quick Apply"
+    }
+]
+
+# Create three columns
+col1, col2, col3 = st.columns(3)
+
+# Function to plot a pie chart
+def plot_pie_chart(ax, labels, sizes, colors, title):
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.set_title(title)
+
+# Plot and display each pie chart in its column
+for col, data in zip([col1, col2, col3], pie_data):
+    fig, ax = plt.subplots()
+    plot_pie_chart(ax, data["labels"], data["sizes"], data["colors"], data["title"])
+    col.pyplot(fig)
 
