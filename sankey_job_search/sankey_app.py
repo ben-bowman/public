@@ -150,7 +150,7 @@ titles = ["Total Applications", "Avg Response Time (days)", "Days to Offer"]
 values = [total_applications, avg_response_time, days_to_offer]
 
 # Emojis (use a font that supports them)
-icons = ["📄", "🕞", ":date:"]
+icons = ["📄", "🕞", "📅"]  # Use actual emoji instead of ":date:"
 
 # Plot metrics
 for i, ax in enumerate(axes):
@@ -165,7 +165,7 @@ for i, ax in enumerate(axes):
     ))
 
     # Set font that supports emojis
-    ax.text(0.5, 0.65, icons[i], fontsize=24, fontname="Segoe UI Emoji", ha='center', va='center', color="white")
+    ax.text(0.5, 0.65, icons[i], fontsize=24, ha='center', va='center', color="white")
     ax.text(0.5, 0.50, titles[i], fontsize=12, ha='center', va='center', color="white") 
     ax.text(0.5, 0.35, str(values[i]), fontsize=18, ha='center', va='center', color="white", fontweight="bold")  
 
