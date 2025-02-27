@@ -176,4 +176,4 @@ for i, ax in enumerate(axes):
 
 # Display the visualization
 plt.tight_layout()
-plt.show()
+st.pyplot(fig)
