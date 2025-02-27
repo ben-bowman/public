@@ -45,7 +45,7 @@ else:
     target_indices = [label_dict[tgt] for tgt in targets]
     
     # Custom color scheme
-    node_colors = ["#074650", "#009292", "#FE6DB6", "#FEB5DA", "#480091", "#B66DFF", "#B5DAFE", "#6DB6FF"]
+    node_colors = ["#074650", "#009292", "#FE6DB6", "#B66DFF", "#480091", "#B66DFF", "#B5DAFE", "#6DB6FF"]
     link_colors = [
         "rgba(7, 70, 80, 0.5)",   # Converted from "#074650"
         "rgba(0, 146, 146, 0.5)", # Converted from "#009292"
