@@ -165,7 +165,7 @@ for i, ax in enumerate(axes):
     ))
 
     # Set font that supports emojis
-    ax.text(0.5, 0.65, icons[i], fontsize=24, fontname="Segoe UI Emoji", ha='center', va='center', color="white")
+    ax.text(0.5, 0.65, icons[i], fontsize=24, ha='center', va='center', color="white")
     ax.text(0.5, 0.50, titles[i], fontsize=12, ha='center', va='center', color="white") 
     ax.text(0.5, 0.35, str(values[i]), fontsize=18, ha='center', va='center', color="white", fontweight="bold")  
 
