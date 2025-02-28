@@ -134,8 +134,8 @@ for col, data in zip([col1, col2, col3], pie_data):
     plot_pie_chart(ax, data["labels"], data["sizes"], data["colors"], data["title"])
     col.pyplot(fig)
 
-    # Create a row with three columns
-    col1, col2, col3 = st.columns(3)
+    # Create columns for displaying metrics
+    m_col1, m_col2, m_col3 = st.columns(3)
 
     # Custom styled metric boxes
     def metric_box(column, label, value, bg_color, emoji):
@@ -160,3 +160,5 @@ for col, data in zip([col1, col2, col3], pie_data):
     metric_box(m_col1, "Total Applications", "339", "#074650", "📑")
     metric_box(m_col2, "Avg Response Time", "6.5 days", "#009292", "⏳")
     metric_box(m_col3, "Days to Offer", "40 days", "#FE6DB6", "📅")
+    
+    st.plotly_chart(sankey_fig, use_container_width=True)
