@@ -130,7 +130,7 @@ pie_data = [
         "labels": ["C", "VP", "Head", "Director", "Manager", "Other"], 
         "sizes": [0.5, 6, 5, 45, 19.5, 24], 
         "colors": ['#074650', '#009292', '#FE6DB6', '#FEB5DA', '#480091', '#B66DFF'],
-        "title": "Job Levels"
+        "title": "Application Levels"
     },
     {
         "labels": ["Yes", "No"], 
@@ -142,7 +142,7 @@ pie_data = [
         "labels": ["Yes", "No"],
         "sizes": [42, 298], 
         "colors":  ['#FEB5DA', '#480091'],
-        "title": "Quick Apply"
+        "title": "Quick Apply?"
     }
 ]
 
@@ -151,7 +151,7 @@ col1, col2, col3 = st.columns(3)
 
 # Function to plot a pie chart
 def plot_pie_chart(ax, labels, sizes, colors, title):
-    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
+    ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90, textprops={'fontsize': 14})
     ax.set_title(title)
 
 # Plot and display each pie chart in its column
