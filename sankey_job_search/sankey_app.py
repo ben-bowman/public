@@ -134,46 +134,28 @@ for col, data in zip([col1, col2, col3], pie_data):
     plot_pie_chart(ax, data["labels"], data["sizes"], data["colors"], data["title"])
     col.pyplot(fig)
 
-# Sample data
-total_applications = 339
-avg_response_time = 6.5  # in days
-days_to_offer = 40
+# Create a row with three columns
+col1, col2, col3 = st.columns(3)
 
-# Creating a figure with 3 subplots for visualization
-fig, axes = plt.subplots(1, 3, figsize=(12, 4))
+# Custom styles for colored metric boxes
+def metric_box(column, label, value, bg_color):
+    column.markdown(
+        f"""
+        <div style="
+            background-color: {bg_color};
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: white;">
+            {label}<br><span style="font-size:24px;">{value}</span>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
-# Define colors
-colors = ["#074650", "#009292", "#FE6DB6"]
-
-# Titles and values
-titles = ["Total Applications", "Avg Response Time (days)", "Days to Offer"]
-values = [total_applications, avg_response_time, days_to_offer]
-
-# Emojis (use a font that supports them)
-icons = ["📄", "🕞", "📅"]  # Use actual emoji instead of ":date:"
-
-# Plot metrics
-for i, ax in enumerate(axes):
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 1)
-
-    # Background box
-    ax.add_patch(mpatches.FancyBboxPatch(
-        (0.1, 0.3), 0.8, 0.4, 
-        boxstyle="round,pad=0.1", 
-        edgecolor="black", facecolor=colors[i]
-    ))
-
-    # Set font that supports emojis
-    ax.text(0.5, 0.65, icons[i], fontsize=24, ha='center', va='center', color="white")
-    ax.text(0.5, 0.50, titles[i], fontsize=12, ha='center', va='center', color="white") 
-    ax.text(0.5, 0.35, str(values[i]), fontsize=18, ha='center', va='center', color="white", fontweight="bold")  
-
-    # Remove axes
-    ax.set_xticks([])
-    ax.set_yticks([])
-    ax.set_frame_on(False)
-
-# Display the visualization
-plt.tight_layout()
-st.pyplot(fig)
+# Display job search metrics with styled boxes
+metric_box(col1, "📑 Total Applications", "339", "#074650")
+metric_box(col2, "⏳ Avg Response Time", "6.5 days", "#009292")
+metric_box(col3, "📅 Days to Offer", "40 days", "#FE6DB6")
