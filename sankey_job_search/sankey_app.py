@@ -160,5 +160,3 @@ def metric_box(column, label, value, bg_color, emoji):
 metric_box(m_col1, "Total Applications", "339", "#074650", "📑")
 metric_box(m_col2, "Avg Response Time", "6.5 days", "#009292", "⏳")
 metric_box(m_col3, "Days to Offer", "40 days", "#FE6DB6", "📅")
-    
-st.plotly_chart(sankey_fig, use_container_width=True)
