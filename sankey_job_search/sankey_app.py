@@ -31,33 +31,6 @@ def load_google_sheet():
 # Load the data
 df = load_google_sheet()
 
-# Create columns for displaying metrics
-m_col1, m_col2, m_col3 = st.columns(3)
-
-# Custom styled metric boxes
-def metric_box(column, label, value, bg_color, emoji):
-    column.markdown(
-        f"""
-        <div style="
-            background-color: {bg_color};
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
-            color: white;">
-            <div style="font-size: 36px;">{emoji}</div>
-            {label}<br><span style="font-size:24px;">{value}</span>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-# Display job search metrics with styled boxes
-metric_box(m_col1, "Total Applications", "339", "#074650", "📑")
-metric_box(m_col2, "Avg Response Time", "6.5 days", "#009292", "⏳")
-metric_box(m_col3, "Days to Offer", "40 days", "#FE6DB6", "📅")
-
 # Check if data is loaded correctly
 if df.empty:
     st.error("No data found in the Google Sheet.")
@@ -121,6 +94,34 @@ else:
         "This dashboard represents my job search from start to finish. This streamlit dashboard includes key metrics from my search, "               "dynamically loads data from a google workbook using a service account and api, uses a Sankey diagram to show flow from "
         "application to offer, and pie charts to show more application details. I was extremely lucky to find an amazing opportunity "               "quickly. See more of my work at [www.benbowman.io](https://www.benbowman.io)."
     )
+    
+    # Create columns for displaying metrics
+    m_col1, m_col2, m_col3 = st.columns(3)
+
+    # Custom styled metric boxes
+    def metric_box(column, label, value, bg_color, emoji):
+        column.markdown(
+            f"""
+            <div style="
+                background-color: {bg_color};
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                font-size: 18px;
+                font-weight: bold;
+                color: white;">
+                <div style="font-size: 36px;">{emoji}</div>
+                {label}<br><span style="font-size:24px;">{value}</span>
+            </div>
+            """,
+            unsafe_allow_html=True
+        )
+
+    # Display job search metrics with styled boxes
+    metric_box(m_col1, "Total Applications", "339", "#074650", "📑")
+    metric_box(m_col2, "Avg Response Time", "6.5 days", "#009292", "⏳")
+    metric_box(m_col3, "Days to Offer", "40 days", "#FE6DB6", "📅")
+    
     st.plotly_chart(sankey_fig, use_container_width=True)
 
 # Hardcoded data
