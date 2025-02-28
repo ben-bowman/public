@@ -153,6 +153,7 @@ col1, col2, col3 = st.columns(3)
 def plot_pie_chart(ax, labels, sizes, colors, title):
     ax.pie(sizes, labels=labels, colors=colors, autopct='%1.1f%%', startangle=90)
     ax.set_title(title)
+    ax.set_aspect('equal')  # Ensure equal aspect ratio
 
 # Plot and display each pie chart in its column
 for col, data in zip([col1, col2, col3], pie_data):
