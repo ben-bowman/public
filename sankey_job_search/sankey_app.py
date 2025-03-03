@@ -160,3 +160,13 @@ for col, data in zip([col1, col2, col3], pie_data):
     fig, ax = plt.subplots()
     plot_pie_chart(ax, data["labels"], data["sizes"], data["colors"], data["title"])
     col.pyplot(fig)
+    
+    # Job Offer Details Section
+st.title("## Job Offer Details")
+st.markdown("""
+    - **Application Number:** 10  
+    - **Customer Cover Letter:** Yes  
+    - **Applied on the Company Site: Yes**  
+    - **Initial Response:** 8 days  
+    - **Application to Offer:** 37 days  
+    """)
