@@ -162,7 +162,7 @@ for col, data in zip([col1, col2, col3], pie_data):
     col.pyplot(fig)
     
     # Job Offer Details Section
-st.title("## Job Offer Details")
+st.title("Job Offer Details")
 st.markdown("""
     - **Application Number:** 10  
     - **Customer Cover Letter:** Yes  
